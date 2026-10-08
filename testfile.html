@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth bg-[#F2EBDD] text-[#171614]">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Les Sciences Qui Ont Changé La Vie Humaine — Exposition & Archive Scientifique</title>
+  <meta name="description" content="Une exposition et archive numérique sur Louis Pasteur, Marie Curie et Philippe Pinel — trois parcours scientifiques français qui ont transformé notre compréhension du monde.">
+
+  <!-- Google Fonts: Cormorant Garamond (Editorial Serif) + Plus Jakarta Sans / Inter + Devanagari + JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Cinzel:wght@500;700&family=Noto+Serif+Devanagari:wght@400;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            display: ['"Cinzel"', '"Cormorant Garamond"', 'serif'],
+            devanagari: ['"Noto Serif Devanagari"', 'serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            archive: {
+              paper: '#F2EBDD',
+              paperDark: '#E6DDCB',
+              paperLight: '#FAF6EE',
+              ink: '#171614',
+              charcoal: '#5C5851',
+              muted: '#7A756D',
+              border: '#D6CEBE',
+              borderDark: '#BDB39E',
+              burgundy: '#6E1F2A',
+              burgundyHover: '#8B2635',
+              burgundyLight: '#F4ECEE',
+              brass: '#A58A55',
+              brassLight: '#C7AE7A',
+              darkSurface: '#171614',
+              darkSurfaceLight: '#24221F',
+            }
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+            'pulse-subtle': 'pulseSubtle 4s ease-in-out infinite',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: 0, transform: 'translateY(6px)' },
+              '100%': { opacity: 1, transform: 'translateY(0)' },
+            },
+            pulseSubtle: {
+              '0%, 100%': { opacity: 0.85 },
+              '50%': { opacity: 1 },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- React 18 & ReactDOM UMD -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- Babel Standalone for JSX compilation -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    body {
+      background-color: #F2EBDD;
+      color: #171614;
+      overflow-x: hidden;
+    }
+
+    /* Subtle French tricolor archive seal */
+    .french-flag-accent {
+      background: linear-gradient(90deg, #1e3a8a 0%, #1e3a8a 33.3%, #F2EBDD 33.3%, #F2EBDD 66.6%, #6E1F2A 66.6%, #6E1F2A 100%);
+    }
+
+    /* Archival paper grain texture */
+    .archival-grain {
+      background-image: radial-gradient(rgba(23, 22, 20, 0.04) 1px, transparent 0);
+      background-size: 20px 20px;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #E6DDCB;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #BDB39E;
+      border-radius: 2px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6E1F2A;
+    }
+
+    /* Historical Image Container with museum framing */
+    .historical-photo-container {
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      border: 1px solid #C7BDAB;
+      background: #171614;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      border-radius: 2px;
+    }
+    .historical-photo-container:hover {
+      border-color: #6E1F2A;
+      box-shadow: 0 4px 16px rgba(110, 31, 42, 0.15);
+    }
+    .historical-photo-container::after {
+      content: "🔍 CLIQUER POUR AGRANDIR / CLICK TO ENLARGE";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(23, 22, 20, 0.95) 0%, transparent 100%);
+      color: #F2EBDD;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      padding: 24px 12px 10px;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .historical-photo-container:hover::after {
+      opacity: 1;
+    }
+    .historical-photo-container img {
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .historical-photo-container:hover img {
+      transform: scale(1.025);
+    }
+
+    /* Editorial chapter tag */
+    .chapter-tag {
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      color: #6E1F2A;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+    }
+    .chapter-tag::before {
+      content: "";
+      display: inline-block;
+      width: 16px;
+      height: 1px;
+      background: #6E1F2A;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased selection:bg-[#6E1F2A]/20 selection:text-[#171614] archival-grain">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useCallback } = React;
+
+    // --- MULTILINGUAL HERO TITLE DATA ---
+    const TITLE_TRANSLATIONS = [
+      {
+        lang: "FR",
+        flag: "🇫🇷",
+        lines: ["LES SCIENCES", "QUI ONT CHANGÉ", "LA VIE HUMAINE"],
+        sub: "Trois parcours scientifiques français. Trois connexions avec la France. Une transformation de la compréhension humaine.",
+      },
+      {
+        lang: "EN",
+        flag: "🇬🇧",
+        lines: ["THE SCIENCES", "THAT CHANGED", "HUMAN LIFE"],
+        sub: "Three scientific journeys. Three French connections. One transformation of human understanding.",
+      },
+      {
+        lang: "HI",
+        flag: "🇮🇳",
+        lines: ["वे विज्ञान", "जिन्होंने मानव जीवन", "बदल दिया"],
+        sub: "तीन वैज्ञानिक यात्राएँ। तीन फ़्रांसीसी संबंध। मानव समझ का एक ऐतिहासिक परिवर्तन।",
+      }
+    ];
+
+    // --- HISTORICAL ARTWORKS REGISTRY ---
+//     const HISTORICAL_IMAGES = {
+//       pinelSalpetriere: {
+//   src: "assets/images/pinel-salpetriere.jpg",
+//   fallbackSrc: "assets/images/pinel-salpetriere.jpg",
+//   title: "Pinel délivrant les aliénés à la Salpêtrière en 1795",
+//   artist: "Tony Robert-Fleury (1876)",
+//   location: "Pitié-Salpêtrière Hospital, Paris",
+//   caption: "Tony Robert-Fleury, 1876. A later historical representation of Pinel's reform narrative at the Salpêtrière.",
+//   englishCaption: "Iconic historical painting depicting the moral and clinical reform: replacing punitive chains with observation, dialogue, and human dignity."
+// },
+//       pasteurLab: {
+//         src: "assets/images/pasteur-lab.jpg",
+//         fallbackSrc: "assets/images/pasteur-lab.jpg",
+//         title: "Louis Pasteur dans son laboratoire (1885)",
+//         artist: "Albert Edelfelt (Musée d'Orsay, Paris)",
+//         location: "Musée d'Orsay, Paris",
+//         caption: "Louis Pasteur observant un bocal contenant une moelle épinière de lapin infecté par la rage, rue d'Ulm à Paris.",
+//         englishCaption: "Louis Pasteur in his rue d'Ulm laboratory in 1885, contemplating the desiccated spinal cord of a rabid rabbit."
+//       },
+//       pasteurMeisterEngraving: {
+//         src: "assets/images/pasteur-meister.jpg",
+//         fallbackSrc: "assets/images/pasteur-meister.jpg",
+//         title: "Première vaccination antirabique sur Joseph Meister (1885)",
+//         artist: "Gravure d'époque — Wellcome Library",
+//         location: "Wellcome Collection, Londres",
+//         caption: "Le 6 juillet 1885, le jeune Joseph Meister, mordu 14 fois par un chien enragé, reçoit le traitement expérimental de Pasteur.",
+//         englishCaption: "July 6, 1885: 9-year-old Joseph Meister receives the experimental rabies inoculation, inaugurating systematic laboratory vaccination."
+//       },
+//       curiePetiteCurie: {
+//         src: "assets/images/curie-petite-curie.jpg",
+//         fallbackSrc: "assets/images/curie-petite-curie.jpg",
+//         title: "Marie Curie et 'Les Petites Curies' (Grande Guerre 1914–1918)",
+//         artist: "Archives militaires françaises / Musée Curie",
+//         location: "Institut Curie, Paris",
+//         caption: "Marie Curie au volant d'une des 20 unités radiologiques mobiles ('Petites Curies') déployées sur le front pour radiographier les soldats blessés.",
+//         englishCaption: "Marie Curie in a mobile field X-ray vehicle ('Petite Curie') operating radiography on the frontlines of World War I."
+//       },
+//       curieLabCouple: {
+//         src: "assets/images/curie-lab-couple.jpg",
+//         fallbackSrc: "assets/images/curie-lab-couple.jpg",
+//         title: "Pierre et Marie Curie dans leur hangar de l'EPCI (Paris)",
+//         artist: "Photographie historique (c. 1900)",
+//         location: "Musée Curie, Paris",
+//         caption: "Pierre et Marie Curie dans leur laboratoire rudimentaire de la rue Lhomond où ils ont isolé le polonium et le radium.",
+//         englishCaption: "Pierre and Marie Curie in their makeshift shed laboratory where tons of pitchblende were processed."
+//       }
+//     };
+
+const HISTORICAL_IMAGES = {
+  pinelSalpetriere: {
+    src: "assets/images/pinel-salpetriere.jpg",
+    fallbackSrc:
+      "assets/images/pinel-salpetriere.jpg",
+    title: "Pinel délivrant les aliénés à la Salpêtrière en 1795",
+    artist: "Tony Robert-Fleury",
+    location: "Pitié-Salpêtrière Hospital, Paris",
+    caption:
+      "Tony Robert-Fleury's historical painting depicting Philippe Pinel freeing patients from their chains at the Salpêtrière.",
+    englishCaption:
+      "An iconic representation of Pinel's reform of psychiatric care, symbolizing a shift from punishment toward observation, dialogue, and human dignity."
+  },
+
+  pasteurLab: {
+    src: "assets/images/pasteur-lab.jpg",
+    fallbackSrc:
+      "assets/images/pasteur-lab.jpg",
+    title: "Louis Pasteur — 1885",
+    artist: "Albert Edelfelt",
+    location: "Musée d'Orsay, Paris",
+    caption:
+      "Portrait of Louis Pasteur painted by Albert Edelfelt in 1885.",
+    englishCaption:
+      "Louis Pasteur, one of France's most influential scientists, whose work transformed microbiology, vaccination, and public health."
+  },
+
+  pasteurMeisterEngraving: {
+    src: "assets/images/pasteur-meister.jpg",
+    fallbackSrc:
+      "assets/images/pasteur-meister.jpg",
+    title: "Première vaccination antirabique — Joseph Meister, 1885",
+    artist: "Wellcome Collection",
+    location: "Wellcome Collection, London",
+    caption:
+      "A historical representation of Pasteur's pioneering rabies vaccination work in 1885.",
+    englishCaption:
+      "Pasteur's pioneering rabies treatment in 1885 marked a major turning point in the history of vaccination."
+  },
+
+  curiePetiteCurie: {
+    src: "assets/images/curie-petite-curie.jpg",
+    fallbackSrc:
+      "assets/images/curie-petite-curie.jpg",
+    title: "Marie Curie et les Petites Curies",
+    artist: "Historical photograph",
+    location: "France, World War I",
+    caption:
+      "Marie Curie with one of the mobile radiography units used during the First World War.",
+    englishCaption:
+      "Marie Curie used mobile X-ray units, known as the 'Little Curies', to bring radiography closer to wounded soldiers on the front."
+  },
+
+  curieLabCouple: {
+    src: "assets/images/curie-lab-couple.jpg",
+    fallbackSrc:
+      "assets/images/curie-lab-couple.jpg",
+    title: "Pierre et Marie Curie dans leur laboratoire",
+    artist: "Historical photograph",
+    location: "Paris, France",
+    caption:
+      "Pierre and Marie Curie demonstrating experimental equipment used in their research into radioactivity.",
+    englishCaption:
+      "Pierre and Marie Curie conducting experiments that contributed to the discovery and study of radioactive elements."
+  }
+};
+
+    // --- WIKIPEDIA LINK COMPONENT ---
+    function WikipediaLink({ name, url, role, className = "" }) {
+      return (
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          title={`Consulter l'article Wikipédia pour ${name} (s'ouvre dans un nouvel onglet)`}
+          className={`inline-flex items-center gap-1 font-medium text-[#171614] hover:text-[#6E1F2A] border-b border-[#6E1F2A]/40 hover:border-[#6E1F2A] pb-0.5 transition-all duration-200 group ${className}`}
+        >
+          <span>{name}</span>
+          <span className="text-xs text-[#6E1F2A] transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 font-mono">↗</span>
+          {role && <span className="text-xs text-[#5C5851] font-normal font-sans">({role})</span>}
+        </a>
+      );
+    }
+
+    // --- FRENCH AUDIO PRONUNCIATION HOOK ---
+    function useFrenchSpeech() {
+      const speak = (text) => {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'fr-FR';
+          utterance.rate = 0.9;
+          const voices = window.speechSynthesis.getVoices();
+          const frenchVoice = voices.find(v => v.lang.startsWith('fr'));
+          if (frenchVoice) utterance.voice = frenchVoice;
+          window.speechSynthesis.speak(utterance);
+        }
+      };
+      return { speak };
+    }
+
+    // --- FULLSCREEN LIGHTBOX MODAL ---
+    function ImageLightbox({ image, onClose }) {
+      useEffect(() => {
+        const handleKeyDown = (e) => {
+          if (e.key === "Escape") onClose();
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+      }, [onClose]);
+
+      if (!image) return null;
+
+      return (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center bg-[#0d0c0b]/95 backdrop-blur-sm p-4 sm:p-8 animate-fade-in"
+          onClick={onClose}
+        >
+          <div 
+            className="relative max-w-5xl max-h-[92vh] flex flex-col bg-[#FAF6EE] border border-[#A58A55] rounded-xs overflow-hidden shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-3.5 bg-[#E6DDCB] border-b border-[#D6CEBE]">
+              <div className="flex items-center gap-2 text-[#6E1F2A] text-xs sm:text-sm tracking-wider uppercase font-mono font-semibold">
+                <span>🏛️ Document d'Archive</span>
+                <span className="text-[#A58A55]">•</span>
+                <span className="text-[#171614] font-sans normal-case text-xs font-semibold">{image.title}</span>
+              </div>
+              <button
+                onClick={onClose}
+                className="flex items-center gap-1.5 px-3 py-1 text-xs text-[#171614] hover:text-[#6E1F2A] bg-[#FAF6EE] hover:bg-[#F2EBDD] border border-[#D6CEBE] rounded-xs transition-colors font-mono"
+              >
+                <span>Fermer / Close</span>
+                <span className="text-sm font-mono">✕</span>
+              </button>
+            </div>
+
+            {/* Image display */}
+            <div className="relative flex-1 flex items-center justify-center p-4 sm:p-6 bg-[#171614] overflow-hidden min-h-[320px]">
+              <img
+                src={image.src}
+                alt={image.title}
+                className="max-h-[66vh] w-auto max-w-full object-contain rounded-xs shadow-lg select-none"
+                onError={(e) => {
+                  if (image.fallbackSrc && e.target.src !== image.fallbackSrc) {
+                    e.target.src = image.fallbackSrc;
+                  }
+                }}
+              />
+            </div>
+
+            {/* Caption */}
+            <div className="px-6 py-4 bg-[#FAF6EE] border-t border-[#D6CEBE] text-sm space-y-1.5">
+              <div className="text-[#171614] font-serif text-base italic leading-relaxed">
+                "{image.caption}"
+              </div>
+              <div className="text-[#5C5851] text-xs leading-relaxed font-sans">
+                {image.englishCaption}
+              </div>
+              <div className="pt-2 flex flex-wrap items-center justify-between text-[11px] text-[#6E1F2A] border-t border-[#D6CEBE]/60 font-mono">
+                <span>Artiste / Source: {image.artist}</span>
+                <span>Conservation : {image.location}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // =========================================================================
+    // ADAPTED COMPONENT: ANIMATED HISTORICAL STORY SEQUENCE
+    // =========================================================================
+    function AnimatedHistoricalSequence({ slides, onOpenLightbox }) {
+      const [active, setActive] = useState(0);
+
+      const handleNext = () => {
+        setActive((prev) => (prev + 1) % slides.length);
+      };
+
+      const handlePrev = () => {
+        setActive((prev) => (prev - 1 + slides.length) % slides.length);
+      };
+
+      const randomRotations = [-2.5, 2, -1.5, 2.5, -2, 1.5];
+      const currentSlide = slides[active];
+
+      return (
+        <div className="w-full bg-[#EAE2D2]/90 border border-[#D1C7B4] rounded-xs p-6 sm:p-10 my-8 shadow-sm relative">
+          
+          {/* Document Number & Metadata Header */}
+          <div className="flex items-center justify-between border-b border-[#D1C7B4] pb-2.5 mb-6 text-[10px] font-mono uppercase tracking-widest text-[#5C5851]">
+            <span>DOCUMENT HISTORIQUE № 0{active + 1} / 0{slides.length}</span>
+            <span className="text-[#6E1F2A] font-semibold">{currentSlide.tag || "ARCHIVE NATIONALE"}</span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            {/* Stacked Animated Archival Image Frame */}
+            <div className="lg:col-span-5 relative min-h-[320px] sm:min-h-[380px] flex items-center justify-center">
+              {slides.map((slide, index) => {
+                const isActive = index === active;
+                const offset = index - active;
+                const rotation = randomRotations[index % randomRotations.length];
+
+                return (
+                  <div
+                    key={index}
+                    onClick={() => {
+                      if (isActive && onOpenLightbox) {
+                        onOpenLightbox({
+                          src: slide.image,
+                          fallbackSrc: slide.image,
+                          title: slide.title,
+                          artist: slide.period,
+                          location: slide.location || "France",
+                          caption: slide.subtitle,
+                          englishCaption: slide.description
+                        });
+                      } else {
+                        setActive(index);
+                      }
+                    }}
+                    style={{
+                      zIndex: isActive ? 20 : 10 - Math.abs(offset),
+                      transform: isActive
+                        ? `rotate(0deg) scale(1)`
+                        : `rotate(${rotation}deg) scale(0.93) translateY(${offset * 10}px)`,
+                      opacity: isActive ? 1 : Math.max(0.25, 0.55 - Math.abs(offset) * 0.2),
+                      transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
+                    }}
+                    className={`absolute inset-0 w-full h-full rounded-xs overflow-hidden shadow-md cursor-pointer border bg-[#171614] ${
+                      isActive ? "border-[#6E1F2A] ring-1 ring-[#6E1F2A]/30" : "border-[#C5BBA7]"
+                    }`}
+                  >
+                    <img
+                      src={slide.image}
+                      alt={slide.title}
+                      className="w-full h-full object-cover object-center select-none"
+                    />
+                    {isActive && (
+                      <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-[#171614]/95 via-[#171614]/50 to-transparent p-3.5 text-[11px] font-mono text-[#F2EBDD] flex items-center justify-between">
+                        <span>🔍 Cliquer pour agrandir / Click to enlarge</span>
+                        <span className="uppercase text-[9px] tracking-wider text-[#A58A55] font-semibold">{slide.period}</span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Narrative Content Card */}
+            <div className="lg:col-span-7 flex flex-col justify-between space-y-4">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between gap-2 border-b border-[#D1C7B4] pb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.5 bg-[#6E1F2A] text-[#F2EBDD] text-xs font-mono font-bold rounded-xs">
+                      {currentSlide.period}
+                    </span>
+                    <span className="text-xs font-mono text-[#5C5851] uppercase tracking-wider">
+                      {currentSlide.location}
+                    </span>
+                  </div>
+                  <span className="text-xs font-mono text-[#6E1F2A] font-bold">
+                    0{active + 1} / 0{slides.length}
+                  </span>
+                </div>
+
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-[#171614] leading-tight tracking-tight">
+                  {currentSlide.title}
+                </h3>
+
+                <p className="text-xs font-mono text-[#6E1F2A] uppercase tracking-widest font-semibold">
+                  {currentSlide.subtitle}
+                </p>
+
+                <p className="text-sm sm:text-base text-[#5C5851] leading-relaxed font-sans pt-1">
+                  {currentSlide.description}
+                </p>
+
+                {currentSlide.quote && (
+                  <div className="bg-[#E5DCC9] border-l-2 border-[#6E1F2A] p-3 rounded-r-xs text-xs text-[#171614] font-serif italic leading-relaxed">
+                    {currentSlide.quote}
+                  </div>
+                )}
+
+                {currentSlide.historicalNote && (
+                  <div className="bg-[#FAF6EE] p-3 rounded-xs text-[11px] font-mono text-[#5C5851] border border-[#D1C7B4]">
+                    🏛️ <strong className="text-[#6E1F2A]">Note d'archive:</strong> {currentSlide.historicalNote}
+                  </div>
+                )}
+              </div>
+
+              {/* Controls */}
+              <div className="flex items-center justify-between pt-4 border-t border-[#D1C7B4]">
+                <div className="flex items-center gap-1.5">
+                  {slides.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setActive(i)}
+                      className={`h-1.5 rounded-xs transition-all ${
+                        active === i ? "w-8 bg-[#6E1F2A]" : "w-2.5 bg-[#C5BBA7] hover:bg-[#5C5851]"
+                      }`}
+                      title={`Aller au document 0${i + 1}`}
+                    />
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={handlePrev}
+                    className="p-2 bg-[#FAF6EE] hover:bg-[#E5DCC9] border border-[#C5BBA7] hover:border-[#6E1F2A] rounded-xs text-[#171614] transition-colors"
+                    title="Document précédent"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={handleNext}
+                    className="p-2 bg-[#FAF6EE] hover:bg-[#E5DCC9] border border-[#C5BBA7] hover:border-[#6E1F2A] rounded-xs text-[#171614] transition-colors"
+                    title="Document suivant"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      );
+    }
+
+    // --- SPEAKER NOTES DRAWER (PRESENTER TOOL) ---
+    function SpeakerNotesDrawer({ isOpen, onClose }) {
+      const notes = [
+        {
+          chapter: "00 — Prologue",
+          cue: "« Bonjour à tous. Nous examinons aujourd'hui trois parcours scientifiques français qui ont transformé notre compréhension du monde vivant, de la matière et de l'esprit. »",
+          bullet: "Insister sur le fil conducteur : Rendre l'invisible visible (Microbes, Rayonnement, L'Esprit humain)."
+        },
+        {
+          chapter: "01 — Louis Pasteur",
+          cue: "« Tout a débuté par un problème agricole très concret : pourquoi le vin français tournait-il au vinaigre ? »",
+          bullet: "Préciser la distinction avec Edward Jenner (1796). Raconter avec émotion le cas décisif de Joseph Meister le 6 juillet 1885."
+        },
+        {
+          chapter: "02 — Marie Curie",
+          cue: "« Née à Varsovie, Marie Curie a trouvé à la Sorbonne le terrain d'excellence pour isoler le polonium et le radium. »",
+          bullet: "Souligner les 2 Prix Nobel et l'engagement des Petites Curies sur le front de 1914. Distinguer la suite historique du nucléaire français."
+        },
+        {
+          chapter: "03 — Philippe Pinel",
+          cue: "« Dans les asiles parisiens de Bicêtre et de la Salpêtrière, Pinel a substitué le soin médical et l'humanité à la barbarie carcérale. »",
+          bullet: "Cliquer sur le tableau de Tony Robert-Fleury pour le projeter en grand devant l'auditoire."
+        },
+        {
+          chapter: "04 — La Synthèse",
+          cue: "« La science change la vie lorsqu'elle nous apprend à voir ce que nous ne pouvions pas voir auparavant. »",
+          bullet: "Conclure sur la portée universelle de la méthode scientifique."
+        }
+      ];
+
+      if (!isOpen) return null;
+
+      return (
+        <div className="fixed inset-y-0 right-0 z-50 w-full sm:w-96 bg-[#FAF6EE] border-l border-[#A58A55] shadow-2xl p-6 flex flex-col justify-between animate-fade-in text-[#171614]">
+          <div className="space-y-4 overflow-y-auto max-h-[85vh] pr-1">
+            <div className="flex items-center justify-between border-b border-[#D6CEBE] pb-3">
+              <div className="flex items-center gap-2 text-[#6E1F2A] font-serif font-bold">
+                <span>🎙️ Notes du Présentateur (Touche N)</span>
+              </div>
+              <button onClick={onClose} className="text-[#5C5851] hover:text-[#6E1F2A] text-lg font-mono">✕</button>
+            </div>
+
+            <div className="text-xs text-[#5C5851] leading-relaxed font-mono">
+              Repères d'allocution orale pour votre présentation en direct.
+            </div>
+
+            <div className="space-y-3.5 pt-2">
+              {notes.map((n, i) => (
+                <div key={i} className="bg-[#EAE2D2] border border-[#D1C7B4] p-3 rounded-xs text-xs space-y-1.5">
+                  <span className="font-mono text-[#6E1F2A] uppercase tracking-wider font-bold block">{n.chapter}</span>
+                  <p className="text-[#171614] italic font-serif leading-relaxed">
+                    {n.cue}
+                  </p>
+                  <p className="text-[#5C5851] text-[11px] border-t border-[#D1C7B4]/60 pt-1 font-sans">
+                    👉 {n.bullet}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="pt-4 border-t border-[#D6CEBE] text-[11px] font-mono text-[#5C5851] flex items-center justify-between">
+            <span>Raccourcis : F (Plein écran) • N (Notes)</span>
+            <button onClick={onClose} className="text-[#6E1F2A] font-semibold hover:underline">Fermer</button>
+          </div>
+        </div>
+      );
+    }
+
+    // =========================================================================
+    // MAIN DIGITAL DOCUMENTARY APPLICATION
+    // =========================================================================
+    function DigitalDocumentaryApp() {
+      const [currentLangIndex, setCurrentLangIndex] = useState(0);
+      const [activeLightboxImage, setActiveLightboxImage] = useState(null);
+      const [isSpeakerNotesOpen, setIsSpeakerNotesOpen] = useState(false);
+      const [selectedTimelineIndex, setSelectedTimelineIndex] = useState(0);
+      const { speak } = useFrenchSpeech();
+
+      // Multilingual Hero Title Auto-Cycle every 3.5s
+      useEffect(() => {
+        const interval = setInterval(() => {
+          setCurrentLangIndex((prev) => (prev + 1) % TITLE_TRANSLATIONS.length);
+        }, 3500);
+        return () => clearInterval(interval);
+      }, []);
+
+      // Keyboard Controls
+      useEffect(() => {
+        const handleKeyDown = (e) => {
+          if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+          if (activeLightboxImage) {
+            if (e.key === "Escape") setActiveLightboxImage(null);
+            return;
+          }
+
+          if (e.key === "f" || e.key === "F") {
+            e.preventDefault();
+            if (!document.fullscreenElement) {
+              document.documentElement.requestFullscreen().catch(() => {});
+            } else {
+              document.exitFullscreen().catch(() => {});
+            }
+          } else if (e.key === "n" || e.key === "N") {
+            e.preventDefault();
+            setIsSpeakerNotesOpen((prev) => !prev);
+          }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+      }, [activeLightboxImage]);
+
+      // --- STORY SEQUENCES DATA ---
+      const pasteurStorySlides = [
+        {
+          title: "Pourquoi le vin français tourne-t-il au vinaigre ?",
+          subtitle: "L'énigme agricole française résolue par la microscopie",
+          period: "1850s–1860s",
+          location: "Dole & Paris, France",
+          tag: "LE PROBLÈME",
+          description: "Le vin représentait une richesse économique et culturelle majeure pour la France. Face aux pertes considérables causées par l'acidification des cuves, Pasteur refuse l'explication d'une décomposition chimique spontanée et place les ferments sous un microscope de haute précision.",
+          image: "assets/images/pasteur-lab.jpg",
+          historicalNote: "Pasteur démontre que les levures sphériques réalisent la bonne fermentation alcoolique, tandis que des bactéries parasites en bâtonnets provoquent l'altération acide."
+        },
+        {
+          title: "Chauffer sans dénaturer le produit",
+          subtitle: "L'invention de la pasteurisation",
+          period: "1864",
+          location: "Arbois / Paris",
+          tag: "PASTEURISATION",
+          description: "Pasteur découvre qu'un chauffage contrôlé entre 50°C et 60°C pendant quelques minutes suffit à neutraliser les micro-organismes indésirables sans altérer les propriétés gustatives. La pasteurisation ne détruit pas la totalité des germes (stérilisation), mais révolutionne la sécurité alimentaire mondiale.",
+          image: "assets/images/pasteur-portrait.jpg",
+          historicalNote: "D'abord appliquée au vin et à la bière, cette méthode sera étendue au lait, réduisant drastiquement la mortalité infantile au XXe siècle."
+        },
+        {
+          title: "Et si la maladie avait une cause invisible ?",
+          subtitle: "La théorie des germes & l'hygiène hospitalière",
+          period: "1870s",
+          location: "École Normale Supérieure, Paris",
+          tag: "THÉORIE DES GERMES",
+          description: "Grâce à ses ballons à col de cygne, Pasteur réfute définitivement le dogme ancien de la génération spontanée. Il prouve que les maladies infectieuses sont causées par des agents microbiens exogènes bien réels, instaurant l'asepsie, la stérilisation des instruments et l'hygiène hospitalière moderne.",
+          image: "assets/images/pasteur-meister.jpg",
+          historicalNote: "Pasteur a démontré que chaque maladie infectieuse correspond à un micro-organisme identifiable, cultivable et maîtrisable."
+        },
+        {
+          title: "6 juillet 1885 : Le sauvetage de Joseph Meister",
+          subtitle: "Le tournant historique de la vaccination antirabique",
+          period: "1885",
+          location: "Paris, France",
+          tag: "VACCINATION",
+          description: "Joseph Meister, un jeune Alsacien de 9 ans mordu 14 fois par un chien enragé, était promis à une mort atroce. Pasteur et le Dr Jacques-Joseph Grancher tentent l'inoculation d'une série de 13 injections de moelles de lapin atténuées. L'enfant survit indemne : la vaccination scientifique triomphe.",
+          image: "assets/images/joseph-meister.jpg",
+          historicalNote: "Edward Jenner avait mis au point le vaccin antivariolique en 1796 ; Pasteur a transformé l'immunisation en un procédé systématique d'atténuation en laboratoire."
+        }
+      ];
+
+      const curieStorySlides = [
+        {
+          title: "Varsovie → Paris",
+          subtitle: "De la Pologne aux amphithéâtres de la Sorbonne",
+          period: "1891",
+          location: "Varsovie (1867) → Paris (1891)",
+          tag: "TRAJECTOIRE",
+          description: "Née Maria Salomea Skłodowska à Varsovie en 1867, elle rejoint Paris en 1891 pour étudier la physique et les mathématiques à la Sorbonne. Naturalisée française, elle épouse le physicien Pierre Curie et devient une figure scientifique de premier plan, profondément liée aux institutions françaises.",
+          image: "assets/images/curie-portrait.jpg",
+          historicalNote: "Marie Curie est née en Pologne et a développé ses découvertes fondamentales au cœur de la recherche universitaire parisienne."
+        },
+        {
+          title: "Qu'est-ce que la radioactivité ?",
+          subtitle: "L'exploration de la pechblende dans un hangar de la rue Lhomond",
+          period: "1898",
+          location: "EPCI, Paris",
+          tag: "DÉCOUVERTE",
+          description: "En explorant les rayonnements invisibles émis par les sels d'uranium (observés par Henri Becquerel), Marie et Pierre Curie découvrent que le rayonnement est une propriété atomique intrinsèque. En traitant manuellement des tonnes de pechblende, ils isolent deux éléments nouveaux : le Polonium et le Radium.",
+          image: "assets/images/curie-lab-couple.jpg",
+          historicalNote: "Marie Curie a forgé le terme scientifique universel de 'radioactivité' pour désigner l'émission spontanée de rayonnement subatomique."
+        },
+        {
+          title: "Deux Prix Nobel Historiques",
+          subtitle: "Physique (1903) & Chimie (1911)",
+          period: "1903 & 1911",
+          location: "Stockholm / Paris",
+          tag: "PRIX NOBEL",
+          description: "En 1903, Marie Curie reçoit le Prix Nobel de Physique avec Pierre Curie et Henri Becquerel. En 1911, elle reçoit le Prix Nobel de Chimie pour l'isolement du radium métallique pur. Elle demeure la première femme nobélisée et la seule personnalité couronnée dans deux sciences distinctes.",
+          image: "assets/images/pierre-curie.jpg",
+          historicalNote: "Les Curie ont délibérément refusé de breveter l'extraction du radium afin que la médecine puisse l'étudier librement."
+        },
+        {
+          title: "Les Petites Curies sur le Front de 1914",
+          subtitle: "La radiologie mobile d'urgence pendant la Grande Guerre",
+          period: "1914–1918",
+          location: "Front français de la Première Guerre mondiale",
+          tag: "MÉDECINE",
+          description: "Constatant que les chirurgiens militaires opéraient à l'aveugle sans voir les éclats d'obus, Marie Curie équipe 20 véhicules radiologiques mobiles ('Petites Curies') et 200 postes de secours, se rendant elle-même au front pour radiographier plus d'un million de soldats blessés.",
+          image: "assets/images/curie-petite-curie.jpg",
+          historicalNote: "Application directe de la physique fondamentale au diagnostic médical d'urgence et à la curiethérapie anticancéreuse."
+        }
+      ];
+
+      const pinelStorySlides = [
+        {
+          title: "Avant le soin : L'enfermement et les chaînes",
+          subtitle: "Les conditions asilaires sous l'Ancien Régime",
+          period: "XVIIIe siècle",
+          location: "Bicêtre & La Salpêtrière, Paris",
+          tag: "LE PROBLÈME",
+          description: "Les récits historiques décrivent les asiles du XVIIIe siècle comme des lieux de détention cruels. Les aliénés étaient enchaînés dans des cachots humides, battus, livrés aux spectacles payants du public et considérés comme possédés ou incurables.",
+          image: "assets/images/pinel-portrait.jpg",
+          historicalNote: "Le Dr Philippe Pinel est nommé à Bicêtre en 1793 puis à la Salpêtrière en 1795, amorçant une révolution médicale humaniste."
+        },
+        {
+          title: "1793–1795 : Le déchaînement & Le traitement moral",
+          subtitle: "Pinel à la Salpêtrière (Tony Robert-Fleury 1876)",
+          period: "1793–1795",
+          location: "Paris, France",
+          tag: "LA RÉFORME",
+          description: "Pinel préconise la suppression des fers et instaure le 'traitement moral' : écoute thérapeutique, régularité des soins, grand air et respect de la dignité humaine. Le surveillant-chef Jean-Baptiste Pussin avait amorcé le déchaînement à Bicêtre en 1797 ; Pinel lui a conféré une autorité médicale et philosophique universelle.",
+          image: "assets/images/pinel-salpetriere.jpg",
+          historicalNote: "Le tableau de Tony Robert-Fleury (1876) est une représentation historique ultérieure célébrant la mémoire de cette réforme fondatrice."
+        },
+        {
+          title: "Il a changé la question médicale",
+          subtitle: "Observation clinique, nosographie & psychiatrie",
+          period: "1801",
+          location: "Hospice de la Salpêtrière, Paris",
+          tag: "NOSOGRAPHIE",
+          description: "Pinel consigne et classifie méthodiquement les troubles de l'esprit (mélancolie, manie, démence, idiotisme) dans son 'Traité médico-philosophique sur l'aliénation mentale'. Il substitue la question 'Qu'a fait ce criminel ?' par 'De quelle affection souffre ce patient et comment le soigner ?'.",
+          image: "assets/images/pinel-salpetriere.jpg",
+          historicalNote: "Pinel n'a pas créé seul la psychiatrie moderne, mais a établi l'observation clinique comme son fondement scientifique."
+        }
+      ];
+
+      // --- EXTENDED TIMELINE DATA ---
+      const timelineEvents = [
+        {
+          year: "1790s",
+          title: "Réformes asilaires de Pinel",
+          figure: "Philippe Pinel",
+          icon: "🧠",
+          desc: "Pinel commence à remplacer les fers et chaînes par le traitement moral et l'observation clinique à Bicêtre et la Salpêtrière."
+        },
+        {
+          year: "1822",
+          title: "Naissance de Louis Pasteur",
+          figure: "Louis Pasteur",
+          icon: "🇫🇷",
+          desc: "Naissance à Dole (Jura). Pasteur étudie la chimie et la cristallographie à l'École normale supérieure de Paris."
+        },
+        {
+          year: "1850s–1860s",
+          title: "Fermentation & Pasteurisation",
+          figure: "Louis Pasteur",
+          icon: "🍷",
+          desc: "Enquêtant sur le vin et la bière, Pasteur démontre la fermentation microbienne et conçoit le chauffage contrôlé."
+        },
+        {
+          year: "1867",
+          title: "Naissance de Marie Curie à Varsovie",
+          figure: "Marie Curie",
+          icon: "🇵🇱",
+          desc: "Naissance de Maria Skłodowska en Pologne, avant son départ pour Paris en 1891 afin d'étudier à la Sorbonne."
+        },
+        {
+          year: "1885",
+          title: "Vaccination de Joseph Meister",
+          figure: "Louis Pasteur",
+          icon: "🐕",
+          desc: "Pasteur traite avec succès le jeune Joseph Meister (9 ans) avec son vaccin expérimental contre la rage."
+        },
+        {
+          year: "1898",
+          title: "Découverte du Polonium & Radium",
+          figure: "Pierre & Marie Curie",
+          icon: "⚛️",
+          desc: "Marie et Pierre Curie isolent deux éléments radioactifs inconnus à Paris et forgent le concept de radioactivité."
+        },
+        {
+          year: "1903 & 1911",
+          title: "Deux Prix Nobel Historiques",
+          figure: "Marie Curie",
+          icon: "🏆",
+          desc: "Prix Nobel de Physique (1903) puis Prix Nobel de Chimie (1911) décernés à Marie Curie."
+        },
+        {
+          year: "1914–1918",
+          title: "Les Petites Curies sur le Front",
+          figure: "Marie Curie",
+          icon: "🚑",
+          desc: "Marie Curie déploie 20 ambulances radiologiques et 200 postes fixes pour secourir plus d'un million de soldats blessés."
+        },
+        {
+          year: "1934",
+          title: "Radioactivité artificielle",
+          figure: "Irène & Frédéric Joliot-Curie",
+          icon: "🔬",
+          desc: "Irène et Frédéric Joliot-Curie découvrent la radioactivité artificielle (Prix Nobel de Chimie 1935)."
+        },
+        {
+          year: "1948",
+          title: "Pile atomique ZOÉ",
+          figure: "CEA (France)",
+          icon: "⚡",
+          desc: "Mise en service du premier réacteur nucléaire français (ZOÉ) au Fort de Châtillon sous la direction de Frédéric Joliot-Curie."
+        },
+        {
+          year: "1960",
+          title: "Gerboise Bleue (Histoire d'État ultérieure)",
+          figure: "Programme d'État français",
+          icon: "🛡️",
+          desc: "Premier essai nucléaire français à Reggane (évolution géopolitique ultérieure distincte des travaux médicaux de Marie Curie)."
+        }
+      ];
+
+      const currentTitle = TITLE_TRANSLATIONS[currentLangIndex];
+      const activeTimeline = timelineEvents[selectedTimelineIndex];
+
+      return (
+        <div className="relative min-h-screen bg-[#F2EBDD] text-[#171614] selection:bg-[#6E1F2A]/20">
+          
+          {/* ========================================================= */}
+          {/* 00 — OPENING HERO: CENTERED MULTILINGUAL TITLE ON PARCHMENT */}
+          {/* ========================================================= */}
+          <section
+            id="intro"
+            className="relative min-h-[96vh] flex flex-col justify-between items-center py-12 px-6 sm:px-12 text-center border-b border-[#D6CEBE]"
+          >
+            {/* Top Seal & Language Indicator */}
+            <div className="w-full max-w-5xl flex items-center justify-between z-10 pt-2">
+              <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-[#6E1F2A] uppercase font-semibold">
+                <span className="w-2 h-2 rounded-full bg-[#6E1F2A]"></span>
+                <span>ARCHIVES NATIONALES · HISTOIRE DES SCIENCES</span>
+              </div>
+
+              {/* Language Switcher */}
+              
+              <div className="flex items-center gap-1.5 bg-[#FAF6EE] border border-[#D6CEBE] px-3 py-1 rounded-xs text-xs">
+                <span className="text-[#5C5851] mr-1 font-mono">Langue:</span>
+                {TITLE_TRANSLATIONS.map((t, idx) => (
+                  <button
+                    key={t.lang}
+                    onClick={() => setCurrentLangIndex(idx)}
+                    className={`px-2 py-0.5 rounded-xs transition-all font-mono text-xs ${
+                      idx === currentLangIndex
+                        ? "bg-[#6E1F2A] text-[#F2EBDD] font-bold shadow-sm"
+                        : "text-[#5C5851] hover:text-[#171614] hover:bg-[#E6DDCB]"
+                    }`}
+                  >
+                    {t.lang}
+                  </button>
+                ))}
+              </div>
+            </div>
+              
+            {/* EXACT VISUAL CENTER HERO TITLE */}
+            <div className="my-auto max-w-4xl z-10 flex flex-col items-center justify-center space-y-6 animate-fade-in py-8">
+              
+              <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-[#6E1F2A] font-mono font-semibold">
+                <span className="h-px w-10 bg-[#6E1F2A]/40"></span>
+                <span>UNE HISTOIRE DES SCIENCES · FRANCE · XIXe — XXe SIÈCLE</span>
+                <button 
+                  onClick={() => speak("Les sciences qui ont changé la vie humaine")}
+                  title="Écouter en français"
+                  className="hover:scale-125 transition-transform text-[#6E1F2A] ml-1"
+                >
+                  🔊
+                </button>
+                <span className="h-px w-10 bg-[#6E1F2A]/40"></span>
+              </div>
+
+              {/* Cycling Title in Center */}
+              <div className="min-h-[160px] sm:min-h-[200px] flex flex-col items-center justify-center">
+                {currentTitle.lines.map((line, lIdx) => (
+                  <h1
+                    key={lIdx}
+                    className="text-4xl sm:text-6xl md:text-7xl font-serif text-[#171614] font-bold leading-[1.08] text-center tracking-tight transition-opacity duration-500"
+                  >
+                    {line}
+                  </h1>
+                ))}
+              </div>
+
+              {/* Subtitle */}
+              <p className="max-w-2xl text-base sm:text-xl text-[#5C5851] font-light leading-relaxed font-sans px-4">
+                {currentTitle.sub}
+              </p>
+
+              {/* Three Names */}
+              <div className="pt-2 flex items-center justify-center gap-4 sm:gap-8 text-sm sm:text-base font-serif text-[#6E1F2A] font-semibold">
+                <span>Louis Pasteur</span>
+                <span className="text-[#A58A55]">•</span>
+                <span>Marie Curie</span>
+                <span className="text-[#A58A55]">•</span>
+                <span>Philippe Pinel</span>
+              </div>
+            </div>
+
+            {/* Scroll Indicator */}
+            <div className="z-10 flex flex-col items-center gap-1.5 text-xs font-mono text-[#5C5851] pt-4">
+              <a
+                href="#narrative-prologue"
+                className="group flex flex-col items-center gap-1 text-[#6E1F2A] hover:text-[#8B2635] transition-colors"
+              >
+                <span>DÉFILER POUR EXPLORER ↓</span>
+              </a>
+            </div>
+          </section>
+
+
+          {/* ========================================================= */}
+          {/* NARRATIVE PROLOGUE: THREE QUESTIONS, THREE TRANSFORMATIONS */}
+          {/* ========================================================= */}
+          <section id="narrative-prologue" className="py-24 px-6 sm:px-12 max-w-5xl mx-auto border-b border-[#D6CEBE] space-y-16">
+            <div className="space-y-4">
+              <span className="chapter-tag">00 — L'ENQUÊTE INITIALE</span>
+              <h2 className="text-3xl sm:text-5xl font-serif font-bold text-[#171614] leading-tight">
+                « Certaines découvertes débutent par d'immenses questions. D'autres par des problèmes très ordinaires. »
+              </h2>
+            </div>
+
+            {/* 3 Real Problems Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-sm sm:text-base text-[#5C5851] leading-relaxed">
+              <div className="border-l-2 border-[#6E1F2A] pl-5 space-y-2">
+                <span className="text-xs font-mono text-[#6E1F2A] block uppercase font-semibold">01 · Dole & Paris</span>
+                <p className="text-[#171614] font-serif text-lg font-bold">
+                  Un vigneron français cherchant pourquoi son vin tournait au vinaigre.
+                </p>
+                <p className="text-xs text-[#5C5851]">
+                  Une énigme de fermentation agricole étudiée au microscope à Lille puis à Paris.
+                </p>
+              </div>
+
+              <div className="border-l-2 border-[#6E1F2A] pl-5 space-y-2">
+                <span className="text-xs font-mono text-[#6E1F2A] block uppercase font-semibold">02 · Varsovie à Paris</span>
+                <p className="text-[#171614] font-serif text-lg font-bold">
+                  Une physicienne tentant de comprendre un rayonnement invisible.
+                </p>
+                <p className="text-xs text-[#5C5851]">
+                  D'étranges rayonnements émis spontanément par la pechblende brute.
+                </p>
+              </div>
+
+              <div className="border-l-2 border-[#6E1F2A] pl-5 space-y-2">
+                <span className="text-xs font-mono text-[#6E1F2A] block uppercase font-semibold">03 · Bicêtre & Salpêtrière</span>
+                <p className="text-[#171614] font-serif text-lg font-bold">
+                  Un médecin se demandant si la maladie mentale pouvait être soignée autrement.
+                </p>
+                <p className="text-xs text-[#5C5851]">
+                  Contester les chaînes et les cachots pour instituer l'observation clinique.
+                </p>
+              </div>
+            </div>
+
+            {/* Three Questions Stanza */}
+            <div className="bg-[#EAE2D2] border border-[#D1C7B4] p-8 sm:p-12 rounded-xs text-center space-y-4">
+              <div className="text-2xl sm:text-4xl font-serif font-bold text-[#171614] space-y-1">
+                <div>Trois questions.</div>
+                <div>Trois parcours.</div>
+                <div className="text-[#6E1F2A]">Trois transformations.</div>
+              </div>
+              <p className="text-xs sm:text-sm font-mono text-[#5C5851] uppercase tracking-widest pt-2">
+                Le fil conducteur : Rendre l'invisible visible
+              </p>
+            </div>
+          </section>
+
+
+          {/* ========================================================= */}
+          {/* SECTION 01 — LOUIS PASTEUR */}
+          {/* ========================================================= */}
+          <section id="pasteur" className="py-24 px-6 sm:px-12 max-w-6xl mx-auto border-b border-[#D6CEBE] space-y-12">
+            
+            {/* Section Header */}
+            <div className="space-y-3">
+              <span className="chapter-tag">01 — LOUIS PASTEUR · L'INFINIMENT PETIT</span>
+              <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+                <h2 className="text-4xl sm:text-6xl font-serif font-bold text-[#171614] tracking-tight">
+                  <WikipediaLink name="Louis Pasteur" url="https://en.wikipedia.org/wiki/Louis_Pasteur" />
+                </h2>
+                <span className="text-xs font-mono text-[#6E1F2A] font-semibold">DOLE, FRANCE — 1822 · 1895</span>
+              </div>
+              <p className="text-xs font-mono text-[#6E1F2A] uppercase tracking-wider font-semibold">
+                Les microbes et les vaccins
+              </p>
+              <p className="text-base sm:text-lg text-[#5C5851] max-w-3xl font-light leading-relaxed">
+                Louis Pasteur (1822–1895) était un chimiste et microbiologiste français dont les recherches ont profondément transformé la compréhension des micro-organismes, de la fermentation, des maladies infectieuses et de la vaccination.
+              </p>
+            </div>
+
+            {/* ADAPTED ANIMATED HISTORICAL STORY COMPONENT FOR PASTEUR */}
+            <AnimatedHistoricalSequence
+              slides={pasteurStorySlides}
+              onOpenLightbox={(img) => setActiveLightboxImage(img)}
+            />
+
+            {/* Pasteurization Temperature Diagram */}
+            <div className="bg-[#EAE2D2] border border-[#D1C7B4] p-6 sm:p-8 rounded-xs space-y-4">
+              <span className="text-xs font-mono uppercase tracking-widest text-[#6E1F2A] block font-semibold">
+                DISPOSITIF EXPÉRIMENTAL · LE CHAUFFAGE CONTRÔLÉ
+              </span>
+              <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#171614]">
+                Chauffer sans détruire le produit
+              </h3>
+              <p className="text-sm text-[#5C5851] max-w-3xl leading-relaxed">
+                Pasteur établit que chauffer les liquides entre 50°C et 60°C pendant un temps court élimine les germes pathogènes tout en préservant le produit. La pasteurisation réduit les bactéries nuisibles ; elle ne détruit pas la totalité des micro-organismes (stérilisation).
+              </p>
+
+              {/* Temperature Line */}
+              <div className="py-5 px-4 bg-[#FAF6EE] border border-[#D1C7B4] rounded-xs space-y-3">
+                <div className="flex items-center justify-between text-xs font-mono text-[#5C5851]">
+                  <span>0°C (Liquide brut)</span>
+                  <span className="text-[#6E1F2A] font-bold">50°C ───────── 60°C (Zone de Pasteurisation)</span>
+                  <span>100°C (Ébullition)</span>
+                </div>
+                <div className="relative h-2 bg-[#D1C7B4] rounded-full overflow-hidden">
+                  <div className="absolute left-1/2 -translate-x-1/2 w-1/4 h-full bg-[#6E1F2A] rounded-full" />
+                </div>
+                <div className="flex flex-wrap items-center justify-between text-xs font-mono text-[#171614] pt-2">
+                  <span>VIN FRANÇAIS</span>
+                  <span className="text-[#6E1F2A]">→</span>
+                  <span>CHAUFFAGE MODÉRÉ (50–60°C)</span>
+                  <span className="text-[#6E1F2A]">→</span>
+                  <span>REFROIDISSEMENT</span>
+                  <span className="text-[#6E1F2A]">→</span>
+                  <span className="text-[#6E1F2A] font-bold">CONSERVATION DU LAIT & DU VIN</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Germ Theory & Jenner Clarification */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs leading-relaxed">
+              <div className="bg-[#FAF6EE] border border-[#D1C7B4] p-6 rounded-xs space-y-2">
+                <span className="font-mono text-[#6E1F2A] uppercase font-bold block">La théorie des germes</span>
+                <p className="text-[#5C5851]">
+                  Si les micro-organismes altèrent les aliments, ils peuvent aussi provoquer des maladies infectieuses chez l'animal et l'homme. Pasteur réfute la génération spontanée, fondant l'asepsie chirurgicale et l'hygiène hospitalière.
+                </p>
+              </div>
+
+              <div className="bg-[#FAF6EE] border-l-2 border-[#6E1F2A] p-6 rounded-r-xs space-y-2">
+                <span className="font-mono text-[#6E1F2A] uppercase font-bold block">Précision historique sur les vaccins</span>
+                <p className="text-[#5C5851]">
+                  Pasteur n'a <em>pas</em> inventé le premier vaccin : le médecin britannique <WikipediaLink name="Edward Jenner" url="https://en.wikipedia.org/wiki/Edward_Jenner" /> avait créé le vaccin antivariolique en 1796. L'apport de Pasteur a été d'ériger la vaccination en méthode scientifique universelle à base de germes atténués en laboratoire (choléra des poules, charbon, rage).
+                </p>
+              </div>
+            </div>
+          </section>
+
+
+          {/* ========================================================= */}
+          {/* SECTION 02 — MARIE CURIE */}
+          {/* ========================================================= */}
+          <section id="curie" className="py-24 px-6 sm:px-12 max-w-6xl mx-auto border-b border-[#D6CEBE] space-y-12">
+            
+            {/* Section Header */}
+            <div className="space-y-3">
+              <span className="chapter-tag">02 — MARIE CURIE · L'ÉNERGIE INVISIBLE RENDUE MESURABLE</span>
+              <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+                <h2 className="text-4xl sm:text-6xl font-serif font-bold text-[#171614] tracking-tight">
+                  <WikipediaLink name="Marie Curie" url="https://en.wikipedia.org/wiki/Marie_Curie" />
+                </h2>
+                <span className="text-xs font-mono text-[#6E1F2A] font-semibold">VARSOVIE (1867) → PARIS (1891)</span>
+              </div>
+              <p className="text-xs font-mono text-[#6E1F2A] uppercase tracking-wider font-semibold">
+                La radioactivité et la médecine
+              </p>
+              <p className="text-base sm:text-lg text-[#5C5851] max-w-3xl font-light leading-relaxed">
+                Née à Varsovie en 1867, Marie Curie s'installe à Paris en 1891 pour étudier à la Sorbonne. Naturalisée française, elle devient une figure majeure des institutions scientifiques françaises, découvrant la radioactivité et fondant la radiothérapie moderne.
+              </p>
+            </div>
+
+            {/* ADAPTED ANIMATED HISTORICAL STORY COMPONENT FOR CURIE */}
+            <AnimatedHistoricalSequence
+              slides={curieStorySlides}
+              onOpenLightbox={(img) => setActiveLightboxImage(img)}
+            />
+
+            {/* Large Split Screen: Polonium & Radium */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="bg-[#FAF6EE] border border-[#D1C7B4] p-6 sm:p-8 rounded-xs space-y-2">
+                <span className="text-xs font-mono uppercase text-[#6E1F2A] tracking-widest block font-semibold">ÉLÉMENT 84 · ISOLÉ EN 1898</span>
+                <h3 className="text-2xl sm:text-3xl font-serif font-bold text-[#171614]">POLONIUM</h3>
+                <p className="text-xs font-mono text-[#5C5851]">Nommé en hommage à la Pologne natale de Marie</p>
+                <p className="text-sm text-[#5C5851] leading-relaxed pt-2">
+                  Isolé dans un hangar de Paris à partir de pechblende minérale, Marie a baptisé cet élément pour attirer l'attention du monde sur la situation de sa patrie d'origine alors sous domination étrangère.
+                </p>
+              </div>
+
+              <div className="bg-[#FAF6EE] border border-[#D1C7B4] p-6 sm:p-8 rounded-xs space-y-2">
+                <span className="text-xs font-mono uppercase text-[#6E1F2A] tracking-widest block font-semibold">ÉLÉMENT 88 · ISOLÉ EN 1898</span>
+                <h3 className="text-2xl sm:text-3xl font-serif font-bold text-[#171614]">RADIUM</h3>
+                <p className="text-xs font-mono text-[#5C5851]">Un nouvel élément intensément radioactif</p>
+                <p className="text-sm text-[#5C5851] leading-relaxed pt-2">
+                  Extrait au prix de fractions chimiques épuisantes. Les propriétés du radium ont immédiatement ouvert la voie à la curiethérapie pour détruire les cellules cancéreuses.
+                </p>
+              </div>
+            </div>
+          </section>
+
+
+          {/* ========================================================= */}
+          {/* SECTION 02B — FROM RADIOACTIVITY TO THE FRENCH NUCLEAR AGE */}
+          {/* ========================================================= */}
+          <section id="nuclear-lineage" className="py-24 px-6 sm:px-12 max-w-6xl mx-auto border-b border-[#D6CEBE] space-y-8">
+            
+            <div className="space-y-3">
+              <span className="chapter-tag">HISTOIRE & LINÉAGE · ÉVOLUTION SCIENTIFIQUE ET POLITIQUE ULTÉRIEURE</span>
+              <h2 className="text-3xl sm:text-5xl font-serif font-bold text-[#171614]">
+                De la radioactivité à l'ère nucléaire française
+              </h2>
+              <p className="text-sm text-[#5C5851] max-w-3xl leading-relaxed">
+                <strong className="text-[#171614]">Distinction historique essentielle :</strong> Les travaux de Marie Curie étaient consacrés à la physique des rayonnements, à la chimie fondamentale et à la médecine radiologique (rayons X et curiethérapie). Le développement ultérieur de l'énergie nucléaire et de la dissuasion militaire française constitue une <em>histoire scientifique et politique postérieure</em>, menée par les générations suivantes.
+              </p>
+            </div>
+
+            {/* Lineage Progression */}
+            <div className="bg-[#EAE2D2] border border-[#D1C7B4] p-6 sm:p-10 rounded-xs space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4 text-xs font-mono">
+                <div className="bg-[#FAF6EE] p-4 rounded-xs border border-[#D1C7B4] space-y-1.5">
+                  <span className="text-[#6E1F2A] font-bold block">1898</span>
+                  <strong className="text-[#171614] block font-sans text-sm">Marie & Pierre Curie</strong>
+                  <p className="text-[#5C5851] text-[11px]">Radioactivité naturelle & isolement du radium à Paris.</p>
+                </div>
+
+                <div className="bg-[#FAF6EE] p-4 rounded-xs border border-[#D1C7B4] space-y-1.5">
+                  <span className="text-[#6E1F2A] font-bold block">1934</span>
+                  <strong className="text-[#171614] block font-sans text-sm">
+                    <WikipediaLink name="Irène & Frédéric Joliot-Curie" url="https://en.wikipedia.org/wiki/Ir%C3%A8ne_Joliot-Curie" />
+                  </strong>
+                  <p className="text-[#5C5851] text-[11px]">Radioactivité artificielle (Prix Nobel de Chimie 1935).</p>
+                </div>
+
+                <div className="bg-[#FAF6EE] p-4 rounded-xs border border-[#D1C7B4] space-y-1.5">
+                  <span className="text-[#6E1F2A] font-bold block">1945</span>
+                  <strong className="text-[#171614] block font-sans text-sm">Création du CEA</strong>
+                  <p className="text-[#5C5851] text-[11px]">Commissariat à l'énergie atomique fondé par De Gaulle.</p>
+                </div>
+
+                <div className="bg-[#FAF6EE] p-4 rounded-xs border border-[#D1C7B4] space-y-1.5">
+                  <span className="text-[#6E1F2A] font-bold block">1948</span>
+                  <strong className="text-[#171614] block font-sans text-sm">Pile atomique ZOÉ</strong>
+                  <p className="text-[#5C5851] text-[11px]">Premier réacteur nucléaire français au Fort de Châtillon.</p>
+                </div>
+
+                <div className="bg-[#FAF6EE] p-4 rounded-xs border border-[#D1C7B4] space-y-1.5">
+                  <span className="text-[#6E1F2A] font-bold block">1960</span>
+                  <strong className="text-[#171614] block font-sans text-sm">Gerboise Bleue</strong>
+                  <p className="text-[#5C5851] text-[11px]">Premier essai nucléaire à Reggane (programme militaire d'État).</p>
+                </div>
+              </div>
+
+              <div className="border-t border-[#D1C7B4] pt-4 text-xs text-[#5C5851] italic font-serif">
+                « Cette chronologie illustre la transition entre la recherche fondamentale de laboratoire et son appropriation ultérieure par les institutions civiles et militaires de l'État. »
+              </div>
+            </div>
+          </section>
+
+
+          {/* ========================================================= */}
+          {/* SECTION 03 — PHILIPPE PINEL */}
+          {/* ========================================================= */}
+          <section id="pinel" className="py-24 px-6 sm:px-12 max-w-6xl mx-auto border-b border-[#D6CEBE] space-y-12">
+            
+            {/* Section Header */}
+            <div className="space-y-3">
+              <span className="chapter-tag">03 — PHILIPPE PINEL · UN AUTRE REGARD SUR L'ESPRIT</span>
+              <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+                <h2 className="text-4xl sm:text-6xl font-serif font-bold text-[#171614] tracking-tight">
+                  <WikipediaLink name="Philippe Pinel" url="https://en.wikipedia.org/wiki/Philippe_Pinel" />
+                </h2>
+                <span className="text-xs font-mono text-[#6E1F2A] font-semibold">BICÊTRE (1793) · SALPÊTRIÈRE (1795)</span>
+              </div>
+              <p className="text-xs font-mono text-[#6E1F2A] uppercase tracking-wider font-semibold">
+                La naissance de la psychiatrie moderne
+              </p>
+              <p className="text-base sm:text-lg text-[#5C5851] max-w-3xl font-light leading-relaxed">
+                Philippe Pinel (1745–1826) était un médecin français dont les réformes à Bicêtre et à la Salpêtrière à Paris ont transformé l'approche des troubles mentaux, substituant l'observation clinique et le soin à la barbarie carcérale.
+              </p>
+            </div>
+
+            {/* ADAPTED ANIMATED HISTORICAL STORY COMPONENT FOR PINEL */}
+            <AnimatedHistoricalSequence
+              slides={pinelStorySlides}
+              onOpenLightbox={(img) => setActiveLightboxImage(img)}
+            />
+
+            {/* MANDATORY PROMINENT ICONIC PINEL PAINTING EXHIBIT */}
+            <div className="space-y-4">
+              <span className="text-xs font-mono uppercase tracking-widest text-[#6E1F2A] block font-semibold">
+                TABLEAU HISTORIQUE FONDAMENTAL
+              </span>
+              
+              <div 
+                onClick={() => setActiveLightboxImage(HISTORICAL_IMAGES.pinelSalpetriere)}
+                className="historical-photo-container rounded-xs shadow-md border border-[#A58A55] group"
+              >
+                <img
+                  src={HISTORICAL_IMAGES.pinelSalpetriere.src}
+                  alt={HISTORICAL_IMAGES.pinelSalpetriere.title}
+                  className="w-full h-80 sm:h-[480px] object-cover object-center"
+                  onError={(e) => { e.target.src = HISTORICAL_IMAGES.pinelSalpetriere.fallbackSrc; }}
+                />
+              </div>
+
+              <div className="bg-[#FAF6EE] border border-[#D1C7B4] p-4 rounded-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+                <div>
+                  <span className="font-serif font-bold text-[#6E1F2A] text-sm block">
+                    Tony Robert-Fleury, 1876. Bibliothèque de l'Académie nationale de médecine, Paris.
+                  </span>
+                  <p className="text-[#171614] italic font-serif mt-0.5">
+                    "Représentation historique commémorative de la réforme humaniste de Pinel à la Salpêtrière."
+                  </p>
+                </div>
+                <button
+                  onClick={() => setActiveLightboxImage(HISTORICAL_IMAGES.pinelSalpetriere)}
+                  className="px-3.5 py-1.5 bg-[#6E1F2A] text-[#F2EBDD] font-mono font-bold rounded-xs text-xs flex-shrink-0 hover:bg-[#8B2635] transition-all"
+                >
+                  Plein écran / Lightbox 🔍
+                </button>
+              </div>
+            </div>
+
+            {/* Pinel's Epistemological Shift */}
+            <div className="bg-[#EAE2D2] border border-[#D1C7B4] p-6 sm:p-10 rounded-xs space-y-6">
+              <div className="space-y-2">
+                <span className="text-xs font-mono uppercase text-[#6E1F2A] tracking-widest font-semibold">LE RENVERSEMENT ÉPISTÉMOLOGIQUE</span>
+                <h3 className="text-2xl sm:text-4xl font-serif font-bold text-[#171614]">
+                  Il a changé la question médicale
+                </h3>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
+                <div className="bg-[#FAF6EE] border-l-2 border-[#6E1F2A] p-4 rounded-r-xs space-y-2">
+                  <span className="font-mono text-[#6E1F2A] font-bold uppercase text-[11px] block">AVANT PINEL</span>
+                  <p className="text-[#171614] font-serif text-base italic">
+                    « Qu'a fait cette personne pour être punie ? »
+                  </p>
+                  <p className="text-[#5C5851] leading-relaxed">
+                    Perçue comme possession diabolique, perversion morale ou criminalité à réprimer dans les fers.
+                  </p>
+                </div>
+
+                <div className="bg-[#FAF6EE] border-l-2 border-[#A58A55] p-4 rounded-r-xs space-y-2">
+                  <span className="font-mono text-[#A58A55] font-bold uppercase text-[11px] block">APRÈS PINEL</span>
+                  <p className="text-[#171614] font-serif text-base italic">
+                    « De quelle affection médicale s'agit-il ? Comment évolue-t-elle et comment la soigner ? »
+                  </p>
+                  <p className="text-[#5C5851] leading-relaxed">
+                    Reconnue comme une maladie clinique nécessitant diagnostic nosologique, observation et thérapie humaine.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between text-xs font-mono text-[#171614] border-t border-[#D1C7B4] pt-4">
+                <span>OBSERVER</span>
+                <span className="text-[#6E1F2A]">→</span>
+                <span>CONSIGNER</span>
+                <span className="text-[#6E1F2A]">→</span>
+                <span>CLASSIFIER</span>
+                <span className="text-[#6E1F2A]">→</span>
+                <span>COMPARER</span>
+                <span className="text-[#6E1F2A]">→</span>
+                <span className="text-[#6E1F2A] font-bold">SOIGNER (TRAITEMENT MORAL)</span>
+              </div>
+            </div>
+          </section>
+
+
+          {/* ========================================================= */}
+          {/* SECTION 04 — THE CONNECTION (MAKING THE INVISIBLE VISIBLE) */}
+          {/* ========================================================= */}
+          <section id="connection" className="py-24 px-6 sm:px-12 max-w-5xl mx-auto border-b border-[#D6CEBE] text-center space-y-16">
+            
+            <div className="space-y-4">
+              <span className="chapter-tag justify-center">04 — LA SYNTHÈSE · LE FIL CONDUCTEUR</span>
+              <h2 className="text-3xl sm:text-6xl font-serif font-bold text-[#171614] leading-tight">
+                ILS ONT ÉTUDIÉ DES DOMAINES DIFFÉRENTS.
+              </h2>
+              <div className="text-2xl sm:text-4xl font-serif font-bold text-[#6E1F2A] italic">
+                MAIS TOUS TROIS ONT CHANGÉ CE QUE L'HUMANITÉ POUVAIT VOIR.
+              </div>
+            </div>
+
+            {/* Three Columns */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+              <div className="bg-[#FAF6EE] border border-[#D1C7B4] p-6 rounded-xs space-y-3">
+                <div className="text-4xl">🦠</div>
+                <h4 className="text-xl font-serif font-bold text-[#171614]">Louis Pasteur</h4>
+                <p className="text-xs font-mono text-[#6E1F2A] uppercase font-semibold">MICROBES</p>
+                <p className="text-xs text-[#5C5851] leading-relaxed">
+                  L'infiniment petit révélé au microscope, sauvant l'alimentation et fondant l'immunologie.
+                </p>
+              </div>
+
+              <div className="bg-[#FAF6EE] border border-[#D1C7B4] p-6 rounded-xs space-y-3">
+                <div className="text-4xl">⚛️</div>
+                <h4 className="text-xl font-serif font-bold text-[#171614]">Marie Curie</h4>
+                <p className="text-xs font-mono text-[#6E1F2A] uppercase font-semibold">RAYONNEMENT</p>
+                <p className="text-xs text-[#5C5851] leading-relaxed">
+                  L'énergie atomique spontanée décodée au cœur de la matière, ouvrant l'imagerie et la cancérologie.
+                </p>
+              </div>
+
+              <div className="bg-[#FAF6EE] border border-[#D1C7B4] p-6 rounded-xs space-y-3">
+                <div className="text-4xl">🧠</div>
+                <h4 className="text-xl font-serif font-bold text-[#171614]">Philippe Pinel</h4>
+                <p className="text-xs font-mono text-[#6E1F2A] uppercase font-semibold">L'ESPRIT HUMAIN</p>
+                <p className="text-xs text-[#5C5851] leading-relaxed">
+                  Une souffrance psychologique méconnue transformée en discipline médicale digne et soignante.
+                </p>
+              </div>
+            </div>
+
+            {/* Climax Stanza */}
+            <div className="bg-[#171614] text-[#F2EBDD] border border-[#A58A55] p-10 sm:p-14 rounded-xs space-y-3">
+              <h3 className="text-2xl sm:text-4xl font-serif font-bold leading-tight">
+                LA SCIENCE TRANSFORME LE MONDE
+              </h3>
+              <div className="text-2xl sm:text-4xl font-serif font-bold text-[#A58A55] italic">
+                LORSQU'ELLE NOUS APPREND À VOIR CE QUE NOUS NE VOYIONS PAS.
+              </div>
+            </div>
+          </section>
+
+
+          {/* ========================================================= */}
+          {/* SECTION 05 — EXTENDED INTERACTIVE TIMELINE */}
+          {/* ========================================================= */}
+          <section id="timeline" className="py-24 px-6 sm:px-12 max-w-6xl mx-auto border-b border-[#D6CEBE] space-y-12">
+            
+            <div className="space-y-3">
+              <span className="chapter-tag">05 — CHRONOLOGIE DES RECHERCHES (1790–1960)</span>
+              <h2 className="text-3xl sm:text-5xl font-serif font-bold text-[#171614]">
+                La Chronologie Documentaire
+              </h2>
+              <p className="text-sm text-[#5C5851] max-w-2xl font-light">
+                Cliquez sur un repère temporel pour consulter les archives correspondantes.
+              </p>
+            </div>
+
+            {/* Timeline Nodes */}
+            <div className="space-y-6">
+              <div className="relative py-4">
+                <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-[#D1C7B4] -translate-y-1/2 z-0" />
+                <div className="relative z-10 flex items-center justify-between gap-2 overflow-x-auto pb-2 scrollbar-none">
+                  {timelineEvents.map((ev, index) => {
+                    const isSelected = index === selectedTimelineIndex;
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedTimelineIndex(index)}
+                        className="flex flex-col items-center group focus:outline-none transition-all duration-200 min-w-[95px]"
+                      >
+                        <div
+                          className={`w-9 h-9 rounded-xs flex items-center justify-center text-sm border transition-all duration-300 ${
+                            isSelected
+                              ? "bg-[#6E1F2A] text-[#F2EBDD] border-[#6E1F2A] scale-110 shadow-md font-bold"
+                              : "bg-[#FAF6EE] text-[#171614] border-[#D1C7B4] group-hover:border-[#6E1F2A]"
+                          }`}
+                        >
+                          <span>{ev.icon}</span>
+                        </div>
+                        <span
+                          className={`mt-2 font-mono text-xs transition-colors ${
+                            isSelected ? "text-[#6E1F2A] font-bold" : "text-[#5C5851] group-hover:text-[#171614]"
+                          }`}
+                        >
+                          {ev.year}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Milestone Spotlight Card */}
+              <div className="bg-[#FAF6EE] border border-[#D1C7B4] rounded-xs p-6 sm:p-8 shadow-sm space-y-3">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-[#D1C7B4] pb-3">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl p-2 bg-[#E6DDCB] rounded-xs border border-[#D1C7B4]">{activeTimeline.icon}</span>
+                    <div>
+                      <span className="text-xs font-mono uppercase text-[#6E1F2A] font-semibold">{activeTimeline.year} • {activeTimeline.figure}</span>
+                      <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#171614]">{activeTimeline.title}</h3>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setSelectedTimelineIndex((prev) => (prev > 0 ? prev - 1 : timelineEvents.length - 1))}
+                      className="px-3 py-1 bg-[#FAF6EE] border border-[#D1C7B4] hover:border-[#6E1F2A] rounded-xs text-xs text-[#171614] font-mono"
+                    >
+                      ← Précédent
+                    </button>
+                    <button
+                      onClick={() => setSelectedTimelineIndex((prev) => (prev < timelineEvents.length - 1 ? prev + 1 : 0))}
+                      className="px-3 py-1 bg-[#FAF6EE] border border-[#D1C7B4] hover:border-[#6E1F2A] rounded-xs text-xs text-[#171614] font-mono"
+                    >
+                      Suivant →
+                    </button>
+                  </div>
+                </div>
+
+                <p className="text-sm sm:text-base text-[#5C5851] leading-relaxed font-sans pt-1">
+                  {activeTimeline.desc}
+                </p>
+              </div>
+            </div>
+          </section>
+
+
+          {/* ========================================================= */}
+          {/* SECTION 06 — SOURCES & ACADEMIC BIBLIOGRAPHY */}
+          {/* ========================================================= */}
+          <footer id="sources" className="py-24 px-6 sm:px-12 max-w-6xl mx-auto text-xs text-[#5C5851] space-y-10">
+            <div className="border-t border-[#D6CEBE] pt-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="space-y-1">
+                <span className="chapter-tag">06 — SOURCES & CRÉDITS SCIENTIFIQUES</span>
+                <h4 className="text-2xl font-serif font-bold text-[#171614]">
+                  Archives & Références Académiques
+                </h4>
+              </div>
+              <a href="#intro" className="font-mono text-[#6E1F2A] hover:underline flex items-center gap-1 font-semibold">
+                <span>Retour en haut ↑</span>
+              </a>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs font-mono">
+              <div className="bg-[#FAF6EE] p-4 rounded-xs border border-[#D1C7B4] space-y-1">
+                <strong className="text-[#171614] block">01 — Institut Pasteur</strong>
+                <p className="text-[11px] text-[#5C5851]">Archives de la rue d'Ulm et collections du Musée Pasteur, Paris.</p>
+              </div>
+              <div className="bg-[#FAF6EE] p-4 rounded-xs border border-[#D1C7B4] space-y-1">
+                <strong className="text-[#171614] block">02 — Musée Curie</strong>
+                <p className="text-[11px] text-[#5C5851]">Archives de l'Institut du Radium, CNRS et Université Paris Cité.</p>
+              </div>
+              <div className="bg-[#FAF6EE] p-4 rounded-xs border border-[#D1C7B4] space-y-1">
+                <strong className="text-[#171614] block">03 — Académie de Médecine</strong>
+                <p className="text-[11px] text-[#5C5851]">Fonds Tony Robert-Fleury et traités nosologiques de Pinel.</p>
+              </div>
+              <div className="bg-[#FAF6EE] p-4 rounded-xs border border-[#D1C7B4] space-y-1">
+                <strong className="text-[#171614] block">04 — NobelPrize.org & Gallica</strong>
+                <p className="text-[11px] text-[#5C5851]">Citations officielles des Prix Nobel et fonds photographique BNF.</p>
+              </div>
+            </div>
+
+            <div className="pt-8 border-t border-[#D6CEBE] flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] font-mono text-[#7A756D]">
+              <span>Les Sciences Qui Ont Changé La Vie Humaine • Exposition Numérique</span>
+              <span>« Le savoir est le patrimoine de l'humanité. »</span>
+            </div>
+          </footer>
+
+
+          {/* DISCRETE PRESENTATION CONTROLS (Bottom Right) */}
+          <div className="fixed bottom-5 right-5 z-40 flex items-center gap-2 bg-[#FAF6EE]/95 backdrop-blur border border-[#C5BBA7] px-3 py-1.5 rounded-xs text-xs font-mono shadow-md opacity-80 hover:opacity-100 transition-opacity text-[#171614]">
+            <button
+              onClick={() => setIsSpeakerNotesOpen((prev) => !prev)}
+              className={`px-2.5 py-1 rounded-xs transition-all flex items-center gap-1.5 ${
+                isSpeakerNotesOpen
+                  ? "bg-[#6E1F2A] text-[#F2EBDD] font-bold"
+                  : "text-[#171614] hover:text-[#6E1F2A]"
+              }`}
+              title="Afficher les notes du présentateur (Touche N)"
+            >
+              <span>🎙️</span>
+              <span className="hidden sm:inline">Notes (N)</span>
+            </button>
+            <span className="text-[#D1C7B4]">•</span>
+            <button
+              onClick={() => {
+                if (!document.fullscreenElement) {
+                  document.documentElement.requestFullscreen().catch(() => {});
+                } else {
+                  document.exitFullscreen().catch(() => {});
+                }
+              }}
+              className="px-2.5 py-1 rounded-xs text-[#171614] hover:text-[#6E1F2A] transition-colors flex items-center gap-1.5"
+              title="Plein écran (Touche F)"
+            >
+              <span>⛶</span>
+              <span className="hidden sm:inline">Plein Écran (F)</span>
+            </button>
+          </div>
+
+          {/* FULLSCREEN LIGHTBOX MODAL */}
+          {activeLightboxImage && (
+            <ImageLightbox
+              image={activeLightboxImage}
+              onClose={() => setActiveLightboxImage(null)}
+            />
+          )}
+
+          {/* SPEAKER NOTES DRAWER */}
+          <SpeakerNotesDrawer
+            isOpen={isSpeakerNotesOpen}
+            onClose={() => setIsSpeakerNotesOpen(false)}
+          />
+
+        </div>
+      );
+    }
+
+    // Render root
+    const rootElement = document.getElementById("root");
+    if (rootElement) {
+      const root = ReactDOM.createRoot(rootElement);
+      root.render(<DigitalDocumentaryApp />);
+    }
+  </script>
+</body>
+</html>
